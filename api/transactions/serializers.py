@@ -1,14 +1,26 @@
 from rest_framework import serializers
-from api.transactions.models import Transaction
+from transactions.models import Transaction
 
 
-class TransactionSerializer(serializers.HyperlinkedModelSerializer):
+class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = ['name', 'referer', 'amount', 'date']
+        fields = ['id', 'name', 'referer', 'amount', 'date']
+        ordering = ['-id']
+
+    def create(self, validated_data):
+        balance = 0
+        qs = Transaction.objects.filter(name= validated_data['name']).order_by('-date', '-id').first()
+        if qs:
+            balance = qs.balance
+
+        transaction = Transaction.objects.create(**validated_data, balance=validated_data['amount'] + balance)
+        return transaction
 
 
 class BalanceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Transaction
-        fields = ['name', 'date', 'balance']
+        fields = ['id', 'name', 'date', 'balance']
+        ordering = ['-id']
+
