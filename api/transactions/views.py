@@ -12,12 +12,29 @@ class BalanceView(viewsets.ReadOnlyModelViewSet):
     queryset = Transaction.objects.all().order_by('-id')
     serializer_class = BalanceSerializer
 
+    def get_queryset(self):
+        """
+        Optionally restricts the returned balances to a given user,
+        by filtering against a `name` query parameter in the URL.
+        Further filtering with the balance 'date' is possible
+        """
+        queryset = Transaction.objects.all().order_by('-id')
+        name = self.request.query_params.get('name', None)
+        date = self.request.query_params.get('date', None)
+        print(self.request.query_params)
+        if name is not None:
+            queryset = queryset.filter(name=name)
+        if date is not None:
+            print("filtering by date")
+            queryset = queryset.filter(date=date)
+        return queryset
+
 
 class TransactionViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows transactions to be viewed or edited.
     """
-    queryset = Transaction.objects.all()
+    queryset = Transaction.objects.all().order_by('-id')
     serializer_class = TransactionSerializer
 
 
