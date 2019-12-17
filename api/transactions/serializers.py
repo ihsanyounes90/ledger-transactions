@@ -2,7 +2,7 @@ from rest_framework import serializers
 from transactions.models import Transaction
 
 
-class TransactionSerializer(serializers.ModelSerializer):
+class TransactionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Transaction
         fields = ['id', 'name', 'referer', 'amount', 'date']
@@ -23,4 +23,8 @@ class BalanceSerializer(serializers.HyperlinkedModelSerializer):
         model = Transaction
         fields = ['id', 'name', 'date', 'balance']
         ordering = ['-id']
+
+
+class ProcessCsvSerializer(serializers.Serializer):
+    path = serializers.CharField(max_length=200)
 
