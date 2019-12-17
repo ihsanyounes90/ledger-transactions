@@ -4,7 +4,7 @@ The api can be explored with the help of Django REST framework,
 so simply run the server after installation and use a web browser.
 
 #### Basic routes
- - /transactions: a transaction is an operation between a account and a referer
+ - /transactions: a transaction is an operation between an account and a referer
  - /balances: the balance status of an account, when adding a transaction it will affect it's balance
     example for getting a balance on a certain date: 
     `curl -sS 'http://127.0.0.1:8000/balances/?name=james&date=2020-01-17'`
